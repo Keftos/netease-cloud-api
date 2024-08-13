@@ -65,16 +65,29 @@ class API{
         return $string;
     }
     // login by phone
-    public function login($cell,$pwd,$countrycode){
-        $url="https://music.163.com/weapi/login/cellphone";
-        $data=array(
-        "phone"=>$cell,
-        "countrycode"=>"86",
-        "countrycode"=>$countrycode,
-        "password"=>$pwd,
-        "rememberLogin"=>"true");
-        return $this->curl($url,$this->prepare($data),true);
-    }
+    public function login($cell, $pwd, $countrycode) {
+    $url = "https://music.163.com/weapi/login/cellphone";
+    $data = array(
+        "phone" => $cell,
+        "countrycode" => $countrycode,
+        "password" => $pwd,
+        "rememberLogin" => "true"
+    );
+    
+    $response = $this->curl($url, $this->prepare($data), true);
+    
+    // Print cookies and response for debugging
+    $cookies = array(
+        'MUSIC_U' => $_COOKIE['MUSIC_U'] ?? 'Not Set',
+        '__csrf' => $_COOKIE['__csrf'] ?? 'Not Set'
+    );
+    
+    return json_encode(array(
+        'response' => $response,
+        'cookies' => $cookies
+    ));
+}
+
     // login by email
     public function loginByEmail($cell,$pwd){
         $url="https://music.163.com/weapi/login";
